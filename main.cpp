@@ -166,10 +166,7 @@ void editStudent() {
 
 // Delete student by ID
 void deleteStudent() {
-    int deleteId;
-    cout << "Enter ID to delete: ";
-    cin >> deleteId;
-
+    int deleteId = getValidInt("Enter ID to delete: ");
     vector<Student> students = readAllStudents();
     bool found = false;
 
