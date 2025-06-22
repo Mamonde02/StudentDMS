@@ -11,6 +11,24 @@ struct Student {
     int age;
 };
 
+// error handling for invalid input
+int getValidInt(const string& prompt) {
+    int value;
+    while (true) {
+        cout << prompt;
+        cin >> value;
+        if (!cin.fail()) {
+            cin.ignore(); // clear newline from buffer
+            return value;
+        } else {
+            cout << "Invalid input. Please enter a number.\n";
+            cin.clear(); // clear error flag
+            cin.ignore(10000, '\n'); // discard invalid input
+        }
+    }
+}
+
+
 // Parse a line into a Student object
 Student parseStudent(const string& line) {
     stringstream ss(line);
