@@ -67,14 +67,31 @@ void writeAllStudents(const vector<Student>& students) {
 
 // Add new student
 void addStudent() {
+    vector<Student> students = readAllStudents();
+
     Student s;
-    cout << "Enter student ID: ";
-    cin >> s.id;
-    cin.ignore();
+    s.id = getValidInt("Enter student ID: ");
+
+    // Check for duplicate ID
+    for (const auto& student : students) {
+        if (student.id == s.id) {
+            cout << "A student with this ID already exists.\n";
+            return;
+        }
+    }
+
     cout << "Enter student name: ";
     getline(cin, s.name);
-    cout << "Enter student age: ";
-    cin >> s.age;
+    while (s.name.empty()) {
+        cout << "Name cannot be empty. Enter student name: ";
+        getline(cin, s.name);
+    }
+
+    s.age = getValidInt("Enter student age: ");
+    while (s.age < 1 || s.age > 120) {
+        cout << "Age must be between 1 and 120.\n";
+        s.age = getValidInt("Enter student age: ");
+    }
 
     ofstream outFile("students.txt", ios::app);
     outFile << s.id << "," << s.name << "," << s.age << "\n";
