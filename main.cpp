@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <sstream>
 using namespace std;
 
 struct Student {
@@ -10,19 +11,43 @@ struct Student {
     int age;
 };
 
-// Save a student to the file
-void saveStudentToFile(const Student& s) {
-    ofstream outFile("students.txt", ios::app); // append mode
-    if (outFile.is_open()) {
-        outFile << s.id << "," << s.name << "," << s.age << "\n";
-        outFile.close();
-        cout << "Student saved to file successfully!\n";
-    } else {
-        cout << "Failed to open file.\n";
-    }
+// Parse a line into a Student object
+Student parseStudent(const string& line) {
+    stringstream ss(line);
+    string idStr, name, ageStr;
+    getline(ss, idStr, ',');
+    getline(ss, name, ',');
+    getline(ss, ageStr);
+
+    return { stoi(idStr), name, stoi(ageStr) };
 }
 
-// Add a new student and save to file
+// Read all students from file
+vector<Student> readAllStudents() {
+    vector<Student> students;
+    ifstream inFile("students.txt");
+    string line;
+
+    while (getline(inFile, line)) {
+        if (!line.empty()) {
+            students.push_back(parseStudent(line));
+        }
+    }
+
+    inFile.close();
+    return students;
+}
+
+// Write all students to file (overwrite)
+void writeAllStudents(const vector<Student>& students) {
+    ofstream outFile("students.txt");
+    for (const auto& s : students) {
+        outFile << s.id << "," << s.name << "," << s.age << "\n";
+    }
+    outFile.close();
+}
+
+// Add new student
 void addStudent() {
     Student s;
     cout << "Enter student ID: ";
@@ -33,55 +58,96 @@ void addStudent() {
     cout << "Enter student age: ";
     cin >> s.age;
 
-    saveStudentToFile(s);
+    ofstream outFile("students.txt", ios::app);
+    outFile << s.id << "," << s.name << "," << s.age << "\n";
+    outFile.close();
+
+    cout << "Student added successfully!\n";
 }
 
-// Read and display all students from file
+// Display all students
 void displayStudents() {
-    ifstream inFile("students.txt");
-    string line;
+    vector<Student> students = readAllStudents();
     cout << "\n--- All Students ---\n";
-    while (getline(inFile, line)) {
-        size_t pos1 = line.find(',');
-        size_t pos2 = line.rfind(',');
-        if (pos1 != string::npos && pos2 != string::npos) {
-            string id = line.substr(0, pos1);
-            string name = line.substr(pos1 + 1, pos2 - pos1 - 1);
-            string age = line.substr(pos2 + 1);
-            cout << "ID: " << id << ", Name: " << name << ", Age: " << age << endl;
-        }
+    for (const auto& s : students) {
+        cout << "ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
     }
-    inFile.close();
 }
 
-// Search a student by ID from file
+// Search student by ID
 void searchStudent() {
-    ifstream inFile("students.txt");
     int searchId;
     cout << "Enter ID to search: ";
     cin >> searchId;
 
-    string line;
+    vector<Student> students = readAllStudents();
     bool found = false;
-    while (getline(inFile, line)) {
-        size_t pos1 = line.find(',');
-        size_t pos2 = line.rfind(',');
-        if (pos1 != string::npos && pos2 != string::npos) {
-            int id = stoi(line.substr(0, pos1));
-            string name = line.substr(pos1 + 1, pos2 - pos1 - 1);
-            string age = line.substr(pos2 + 1);
-
-            if (id == searchId) {
-                cout << "Student Found: ID: " << id << ", Name: " << name << ", Age: " << age << endl;
-                found = true;
-                break;
-            }
+    for (const auto& s : students) {
+        if (s.id == searchId) {
+            cout << "Student Found: ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
+            found = true;
+            break;
         }
     }
-    if (!found) {
+
+    if (!found)
         cout << "Student not found.\n";
+}
+
+// Edit student by ID
+void editStudent() {
+    int editId;
+    cout << "Enter ID to edit: ";
+    cin >> editId;
+
+    vector<Student> students = readAllStudents();
+    bool found = false;
+
+    for (auto& s : students) {
+        if (s.id == editId) {
+            cout << "Editing student: " << s.name << endl;
+            cin.ignore();
+            cout << "Enter new name: ";
+            getline(cin, s.name);
+            cout << "Enter new age: ";
+            cin >> s.age;
+            found = true;
+            break;
+        }
     }
-    inFile.close();
+
+    if (found) {
+        writeAllStudents(students);
+        cout << "Student record updated.\n";
+    } else {
+        cout << "Student ID not found.\n";
+    }
+}
+
+// Delete student by ID
+void deleteStudent() {
+    int deleteId;
+    cout << "Enter ID to delete: ";
+    cin >> deleteId;
+
+    vector<Student> students = readAllStudents();
+    bool found = false;
+
+    vector<Student> updatedStudents;
+    for (const auto& s : students) {
+        if (s.id == deleteId) {
+            found = true;
+        } else {
+            updatedStudents.push_back(s);
+        }
+    }
+
+    if (found) {
+        writeAllStudents(updatedStudents);
+        cout << "Student deleted successfully.\n";
+    } else {
+        cout << "Student ID not found.\n";
+    }
 }
 
 int main() {
@@ -92,7 +158,9 @@ int main() {
         cout << "1. Add Student\n";
         cout << "2. Display All Students\n";
         cout << "3. Search Student by ID\n";
-        cout << "4. Exit\n";
+        cout << "4. Edit Student by ID\n";
+        cout << "5. Delete Student by ID\n";
+        cout << "6. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -100,10 +168,12 @@ int main() {
             case 1: addStudent(); break;
             case 2: displayStudents(); break;
             case 3: searchStudent(); break;
-            case 4: cout << "Exiting program.\n"; break;
+            case 4: editStudent(); break;
+            case 5: deleteStudent(); break;
+            case 6: cout << "Exiting program.\n"; break;
             default: cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 4);
+    } while (choice != 6);
 
     return 0;
 }
