@@ -131,21 +131,26 @@ void searchStudent() {
 
 // Edit student by ID
 void editStudent() {
-    int editId;
-    cout << "Enter ID to edit: ";
-    cin >> editId;
-
+    int editId = getValidInt("Enter ID to edit: ");
     vector<Student> students = readAllStudents();
     bool found = false;
 
     for (auto& s : students) {
         if (s.id == editId) {
             cout << "Editing student: " << s.name << endl;
-            cin.ignore();
             cout << "Enter new name: ";
             getline(cin, s.name);
-            cout << "Enter new age: ";
-            cin >> s.age;
+            while (s.name.empty()) {
+                cout << "Name cannot be empty. Enter new name: ";
+                getline(cin, s.name);
+            }
+
+            s.age = getValidInt("Enter new age: ");
+            while (s.age < 1 || s.age > 120) {
+                cout << "Age must be between 1 and 120.\n";
+                s.age = getValidInt("Enter new age: ");
+            }
+
             found = true;
             break;
         }
