@@ -111,10 +111,7 @@ void displayStudents() {
 
 // Search student by ID
 void searchStudent() {
-    int searchId;
-    cout << "Enter ID to search: ";
-    cin >> searchId;
-
+    int searchId = getValidInt("Enter ID to search: ");
     vector<Student> students = readAllStudents();
     bool found = false;
     for (const auto& s : students) {
