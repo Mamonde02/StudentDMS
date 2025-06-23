@@ -66,6 +66,7 @@ void writeAllStudents(const vector<Student>& students) {
 }
 
 // Add new student
+
 void addStudent() {
     vector<Student> students = readAllStudents();
     Student s;
@@ -97,6 +98,7 @@ void addStudent() {
 
         if (!duplicate) break;
     }
+    //
 
     cin.ignore(); // Clear newline after entering ID
 
@@ -146,9 +148,26 @@ void displayStudents() {
 void searchStudent() {
     int searchId = getValidInt("Enter ID to search: ");
     vector<Student> students = readAllStudents();
+    Student s;
+    string input;
+
+    // ID input with 'back' option
+    while (true) {
+        cout << "Enter student ID (or type 'back' to return): ";
+        cin >> input;
+        if (input == "back" || input == "0") return;
+
+        try {
+            s.id = stoi(input);
+            
+        } catch (...) {
+            cout << "Invalid input. Please enter a valid number.\n";
+            continue;
+        }
+
     bool found = false;
     for (const auto& s : students) {
-        if (s.id == searchId) {
+        if (s.id == stoi(input)) {
             cout << "Student Found: ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
             found = true;
             break;
@@ -157,6 +176,7 @@ void searchStudent() {
 
     if (!found)
         cout << "Student not found.\n";
+    }
 }
 
 // Edit student by ID
