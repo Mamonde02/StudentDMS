@@ -68,31 +68,64 @@ void writeAllStudents(const vector<Student>& students) {
 // Add new student
 void addStudent() {
     vector<Student> students = readAllStudents();
-
     Student s;
-    s.id = getValidInt("Enter student ID: ");
 
-    // Check for duplicate ID
-    for (const auto& student : students) {
-        if (student.id == s.id) {
-            cout << "A student with this ID already exists.\n";
-            return;
+    string input;
+
+    // ID input with 'back' option
+    while (true) {
+        cout << "Enter student ID (or type 'back' to return): ";
+        cin >> input;
+        if (input == "back" || input == "0") return;
+
+        try {
+            s.id = stoi(input);
+        } catch (...) {
+            cout << "Invalid input. Please enter a valid number.\n";
+            continue;
+        }
+
+        // Check for duplicate ID
+        bool duplicate = false;
+        for (const auto& student : students) {
+            if (student.id == s.id) {
+                cout << "A student with this ID already exists.\n";
+                duplicate = true;
+                break;
+            }
+        }
+
+        if (!duplicate) break;
+    }
+
+    cin.ignore(); // Clear newline after entering ID
+
+    // Name input
+    while (true) {
+        cout << "Enter student name (or type 'back' to return): ";
+        getline(cin, s.name);
+        if (s.name == "back" || s.name == "0") return;
+        if (!s.name.empty()) break;
+        cout << "Name cannot be empty.\n";
+    }
+
+    // Age input
+    while (true) {
+        cout << "Enter student age (or type 'back' to return): ";
+        cin >> input;
+        if (input == "back" || input == "0") return;
+
+        try {
+            s.age = stoi(input);
+            if (s.age < 1 || s.age > 120)
+                throw out_of_range("Invalid age");
+            break;
+        } catch (...) {
+            cout << "Please enter a valid age between 1 and 120.\n";
         }
     }
 
-    cout << "Enter student name: ";
-    getline(cin, s.name);
-    while (s.name.empty()) {
-        cout << "Name cannot be empty. Enter student name: ";
-        getline(cin, s.name);
-    }
-
-    s.age = getValidInt("Enter student age: ");
-    while (s.age < 1 || s.age > 120) {
-        cout << "Age must be between 1 and 120.\n";
-        s.age = getValidInt("Enter student age: ");
-    }
-
+    // Save student to file
     ofstream outFile("students.txt", ios::app);
     outFile << s.id << "," << s.name << "," << s.age << "\n";
     outFile.close();
