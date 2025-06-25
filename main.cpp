@@ -238,6 +238,23 @@ void deleteStudent() {
     vector<Student> students = readAllStudents();
     bool found = false;
 
+    Student s;
+    string input;
+
+    // ID input with 'back' option
+    while (true) {
+        cout << "Enter student ID (or type 'back' to return): ";
+        cin >> input;
+        if (input == "back" || input == "0") return;
+
+        try {
+            s.id = stoi(input);
+            
+        } catch (...) {
+            cout << "Invalid input. Please enter a valid number.\n";
+            continue;
+        }
+        
     vector<Student> updatedStudents;
     for (const auto& s : students) {
         if (s.id == deleteId) {
@@ -253,6 +270,7 @@ void deleteStudent() {
     } else {
         cout << "Student ID not found.\n";
     }
+}
 }
 
 int main() {
