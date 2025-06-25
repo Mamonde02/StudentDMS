@@ -181,12 +181,28 @@ void searchStudent() {
 
 // Edit student by ID
 void editStudent() {
-    int editId = getValidInt("Enter ID to edit: ");
+    // int editId = getValidInt("Enter ID to edit: ");
     vector<Student> students = readAllStudents();
+    Student s;
+    string input;
+
+    // ID input with 'back' option
+    while (true) {
+        cout << "Enter student ID (or type 'back' to return): ";
+        cin >> input;
+        if (input == "back" || input == "0") return;
+
+        try {
+            s.id = stoi(input);
+            
+        } catch (...) {
+            cout << "Invalid input. Please enter a valid number.\n";
+            continue;
+        }
     bool found = false;
 
     for (auto& s : students) {
-        if (s.id == editId) {
+        if (s.id == stoi(input)) {
             cout << "Editing student: " << s.name << endl;
             cout << "Enter new name: ";
             getline(cin, s.name);
@@ -204,6 +220,7 @@ void editStudent() {
             found = true;
             break;
         }
+        
     }
 
     if (found) {
@@ -211,6 +228,7 @@ void editStudent() {
         cout << "Student record updated.\n";
     } else {
         cout << "Student ID not found.\n";
+    }
     }
 }
 
