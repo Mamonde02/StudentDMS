@@ -146,7 +146,7 @@ void displayStudents() {
 
 // Search student by ID
 void searchStudent() {
-    int searchId = getValidInt("Enter ID to search: ");
+    // int searchId = getValidInt("Enter ID to search: ");
     vector<Student> students = readAllStudents();
     Student s;
     string input;
@@ -234,7 +234,7 @@ void editStudent() {
 
 // Delete student by ID
 void deleteStudent() {
-    int deleteId = getValidInt("Enter ID to delete: ");
+    // int deleteId = getValidInt("Enter ID to delete: ");
     vector<Student> students = readAllStudents();
     bool found = false;
 
@@ -254,10 +254,10 @@ void deleteStudent() {
             cout << "Invalid input. Please enter a valid number.\n";
             continue;
         }
-        
+
     vector<Student> updatedStudents;
     for (const auto& s : students) {
-        if (s.id == deleteId) {
+        if (s.id == stoi(input)) {
             found = true;
         } else {
             updatedStudents.push_back(s);
