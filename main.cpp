@@ -175,7 +175,7 @@ void searchStudent() {
     }
 
     if (!found)
-        cout << "Student not found.\n";
+        cout << "Student not found with ID: " << s.id << ".\n";
     }
 }
 
@@ -227,7 +227,9 @@ void editStudent() {
         writeAllStudents(students);
         cout << "Student record updated.\n";
     } else {
-        cout << "Student ID not found.\n";
+        // cout << "Student ID not found in the database.\n";
+        cout << "Student not found with ID: " << s.id << ".\n";
+
     }
     }
 }
@@ -268,7 +270,8 @@ void deleteStudent() {
         writeAllStudents(updatedStudents);
         cout << "Student deleted successfully.\n";
     } else {
-        cout << "Student ID not found.\n";
+        // cout << "Student ID not found.\n";
+        cout << "Student not found with ID: " << s.id << ".\n";
     }
 }
 }
