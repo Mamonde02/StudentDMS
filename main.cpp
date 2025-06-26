@@ -5,49 +5,58 @@
 #include <sstream>
 using namespace std;
 
-struct Student {
+struct Student
+{
     int id;
     string name;
     int age;
 };
 
 // error handling for invalid input
-int getValidInt(const string& prompt) {
+int getValidInt(const string &prompt)
+{
     int value;
-    while (true) {
+    while (true)
+    {
         cout << prompt;
         cin >> value;
-        if (!cin.fail()) {
+        if (!cin.fail())
+        {
             cin.ignore(); // clear newline from buffer
             return value;
-        } else {
+        }
+        else
+        {
             cout << "Invalid input. Please enter a number.\n";
-            cin.clear(); // clear error flag
+            cin.clear();             // clear error flag
             cin.ignore(10000, '\n'); // discard invalid input
         }
     }
 }
 
-
 // Parse a line into a Student object
-Student parseStudent(const string& line) {
+Student parseStudent(const string &line)
+{
     stringstream ss(line);
     string idStr, name, ageStr;
     getline(ss, idStr, ',');
     getline(ss, name, ',');
     getline(ss, ageStr);
 
-    return { stoi(idStr), name, stoi(ageStr) };
+    return {stoi(idStr), name, stoi(ageStr)};
 }
 
 // Read all students from file
-vector<Student> readAllStudents() {
+vector<Student> readAllStudents()
+{
     vector<Student> students;
     ifstream inFile("students.txt");
     string line;
 
-    while (getline(inFile, line)) {
-        if (!line.empty()) {
+    while (getline(inFile, line))
+    {
+        if (!line.empty())
+        {
             students.push_back(parseStudent(line));
         }
     }
@@ -57,9 +66,11 @@ vector<Student> readAllStudents() {
 }
 
 // Write all students to file (overwrite)
-void writeAllStudents(const vector<Student>& students) {
+void writeAllStudents(const vector<Student> &students)
+{
     ofstream outFile("students.txt");
-    for (const auto& s : students) {
+    for (const auto &s : students)
+    {
         outFile << s.id << "," << s.name << "," << s.age << "\n";
     }
     outFile.close();
@@ -67,62 +78,79 @@ void writeAllStudents(const vector<Student>& students) {
 
 // Add new student
 
-void addStudent() {
+void addStudent()
+{
     vector<Student> students = readAllStudents();
     Student s;
 
     string input;
 
     // ID input with 'back' option
-    while (true) {
+    while (true)
+    {
         cout << "Enter student ID (or type 'back' to return): ";
         cin >> input;
-        if (input == "back" || input == "0") return;
+        if (input == "back" || input == "0")
+            return;
 
-        try {
+        try
+        {
             s.id = stoi(input);
-        } catch (...) {
+        }
+        catch (...)
+        {
             cout << "Invalid input. Please enter a valid number.\n";
             continue;
         }
 
         // Check for duplicate ID
         bool duplicate = false;
-        for (const auto& student : students) {
-            if (student.id == s.id) {
+        for (const auto &student : students)
+        {
+            if (student.id == s.id)
+            {
                 cout << "A student with this ID already exists.\n";
                 duplicate = true;
                 break;
             }
         }
 
-        if (!duplicate) break;
+        if (!duplicate)
+            break;
     }
     //
 
     cin.ignore(); // Clear newline after entering ID
 
     // Name input
-    while (true) {
+    while (true)
+    {
         cout << "Enter student name (or type 'back' to return): ";
         getline(cin, s.name);
-        if (s.name == "back" || s.name == "0") return;
-        if (!s.name.empty()) break;
+        if (s.name == "back" || s.name == "0")
+            return;
+        if (!s.name.empty())
+            break;
         cout << "Name cannot be empty.\n";
     }
 
     // Age input
-    while (true) {
+    while (true)
+    {
         cout << "Enter student age (or type 'back' to return): ";
         cin >> input;
-        if (input == "back" || input == "0") return;
+        if (input == "back" || input == "0")
+            return;
 
-        try {
+        try
+        {
             s.age = stoi(input);
             if (s.age < 1 || s.age > 120)
                 throw out_of_range("Invalid age");
             break;
-        } catch (...) {
+        }
+        catch (...)
+        {
             cout << "Please enter a valid age between 1 and 120.\n";
         }
     }
@@ -136,106 +164,126 @@ void addStudent() {
 }
 
 // Display all students
-void displayStudents() {
+void displayStudents()
+{
     vector<Student> students = readAllStudents();
     cout << "\n--- All Students ---\n";
-    for (const auto& s : students) {
+    for (const auto &s : students)
+    {
         cout << "ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
     }
 }
 
 // Search student by ID
-void searchStudent() {
+void searchStudent()
+{
     // int searchId = getValidInt("Enter ID to search: ");
     vector<Student> students = readAllStudents();
     Student s;
     string input;
 
     // ID input with 'back' option
-    while (true) {
+    while (true)
+    {
         cout << "Enter student ID (or type 'back' to return): ";
         cin >> input;
-        if (input == "back" || input == "0") return;
+        if (input == "back" || input == "0")
+            return;
 
-        try {
+        try
+        {
             s.id = stoi(input);
-            
-        } catch (...) {
+        }
+        catch (...)
+        {
             cout << "Invalid input. Please enter a valid number.\n";
             continue;
         }
 
-    bool found = false;
-    for (const auto& s : students) {
-        if (s.id == stoi(input)) {
-            cout << "Student Found: ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
-            found = true;
-            break;
+        bool found = false;
+        for (const auto &s : students)
+        {
+            if (s.id == stoi(input))
+            {
+                cout << "Student Found: ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
+                found = true;
+                break;
+            }
         }
-    }
 
-    if (!found)
-        cout << "Student not found with ID: " << s.id << ".\n";
+        if (!found)
+            cout << "Student not found with ID: " << s.id << ".\n";
     }
 }
 
 // Edit student by ID
-void editStudent() {
+void editStudent()
+{
     // int editId = getValidInt("Enter ID to edit: ");
     vector<Student> students = readAllStudents();
     Student s;
     string input;
 
     // ID input with 'back' option
-    while (true) {
+    while (true)
+    {
         cout << "Enter student ID (or type 'back' to return): ";
         cin >> input;
-        if (input == "back" || input == "0") return;
+        if (input == "back" || input == "0")
+            return;
 
-        try {
+        try
+        {
             s.id = stoi(input);
-            
-        } catch (...) {
+        }
+        catch (...)
+        {
             cout << "Invalid input. Please enter a valid number.\n";
             continue;
         }
-    bool found = false;
+        bool found = false;
 
-    for (auto& s : students) {
-        if (s.id == stoi(input)) {
-            cout << "Editing student: " << s.name << endl;
-            cout << "Enter new name: ";
-            getline(cin, s.name);
-            while (s.name.empty()) {
-                cout << "Name cannot be empty. Enter new name: ";
+        for (auto &s : students)
+        {
+            if (s.id == stoi(input))
+            {
+                cout << "Editing student: " << s.name << endl;
+                cout << "Enter new name: ";
                 getline(cin, s.name);
-            }
+                while (s.name.empty())
+                {
+                    cout << "Name cannot be empty. Enter new name: ";
+                    getline(cin, s.name);
+                }
 
-            s.age = getValidInt("Enter new age: ");
-            while (s.age < 1 || s.age > 120) {
-                cout << "Age must be between 1 and 120.\n";
                 s.age = getValidInt("Enter new age: ");
+                while (s.age < 1 || s.age > 120)
+                {
+                    cout << "Age must be between 1 and 120.\n";
+                    s.age = getValidInt("Enter new age: ");
+                }
+
+                found = true;
+                break;
             }
-
-            found = true;
-            break;
         }
-        
-    }
 
-    if (found) {
-        writeAllStudents(students);
-        cout << "Student record updated.\n";
-    } else {
-        // cout << "Student ID not found in the database.\n";
-        cout << "Student not found with ID: " << s.id << ".\n";
-
-    }
+        if (found)
+        {
+            writeAllStudents(students);
+            cout << "Student record updated.\n";
+        }
+        else
+        {
+            // cout << "Student ID not found in the database.\n";
+            cout << "Student not found with ID: " << s.id << ".\n";
+        }
     }
 }
 
 // Delete student by ID
-void deleteStudent() {
+void deleteStudent()
+{
     // int deleteId = getValidInt("Enter ID to delete: ");
     vector<Student> students = readAllStudents();
     bool found = false;
@@ -244,42 +292,55 @@ void deleteStudent() {
     string input;
 
     // ID input with 'back' option
-    while (true) {
+    while (true)
+    {
         cout << "Enter student ID (or type 'back' to return): ";
         cin >> input;
-        if (input == "back" || input == "0") return;
+        if (input == "back" || input == "0")
+            return;
 
-        try {
+        try
+        {
             s.id = stoi(input);
-            
-        } catch (...) {
+        }
+        catch (...)
+        {
             cout << "Invalid input. Please enter a valid number.\n";
             continue;
         }
 
-    vector<Student> updatedStudents;
-    for (const auto& s : students) {
-        if (s.id == stoi(input)) {
-            found = true;
-        } else {
-            updatedStudents.push_back(s);
+        vector<Student> updatedStudents;
+        for (const auto &s : students)
+        {
+            if (s.id == stoi(input))
+            {
+                found = true;
+            }
+            else
+            {
+                updatedStudents.push_back(s);
+            }
+        }
+
+        if (found)
+        {
+            writeAllStudents(updatedStudents);
+            cout << "Student deleted successfully.\n";
+        }
+        else
+        {
+            // cout << "Student ID not found.\n";
+            cout << "Student not found with ID: " << s.id << ".\n";
         }
     }
-
-    if (found) {
-        writeAllStudents(updatedStudents);
-        cout << "Student deleted successfully.\n";
-    } else {
-        // cout << "Student ID not found.\n";
-        cout << "Student not found with ID: " << s.id << ".\n";
-    }
-}
 }
 
-int main() {
+int main()
+{
     int choice;
 
-    do {
+    do
+    {
         cout << "\n--- Student Database Menu ---\n";
         cout << "1. Add Student\n";
         cout << "2. Display All Students\n";
@@ -290,14 +351,28 @@ int main() {
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch (choice) {
-            case 1: addStudent(); break;
-            case 2: displayStudents(); break;
-            case 3: searchStudent(); break;
-            case 4: editStudent(); break;
-            case 5: deleteStudent(); break;
-            case 6: cout << "Exiting program.\n"; break;
-            default: cout << "Invalid choice. Try again.\n";
+        switch (choice)
+        {
+        case 1:
+            addStudent();
+            break;
+        case 2:
+            displayStudents();
+            break;
+        case 3:
+            searchStudent();
+            break;
+        case 4:
+            editStudent();
+            break;
+        case 5:
+            deleteStudent();
+            break;
+        case 6:
+            cout << "Exiting program.\n";
+            break;
+        default:
+            cout << "Invalid choice. Try again.\n";
         }
     } while (choice != 6);
 
