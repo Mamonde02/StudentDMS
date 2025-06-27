@@ -5,6 +5,13 @@
 #include <sstream>
 using namespace std;
 
+// Color codes for terminal output
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define RESET "\033[0m"
+
 struct Student
 {
     int id;
@@ -341,13 +348,20 @@ int main()
 
     do
     {
-        cout << "\n--- Student Database Menu ---\n";
-        cout << "1. Add Student\n";
-        cout << "2. Display All Students\n";
-        cout << "3. Search Student by ID\n";
-        cout << "4. Edit Student by ID\n";
-        cout << "5. Delete Student by ID\n";
-        cout << "6. Exit\n";
+        cout << GREEN << "\n--- Student Database Menu ---\n"
+             << RESET << endl;
+        cout << RED << "1. Add Student\n"
+             << RESET;
+        cout << BLUE << "2. Display All Students\n"
+             << RESET;
+        cout << YELLOW << "3. Search Student by ID\n";
+        cout << RESET;
+        cout << GREEN << "4. Edit Student by ID\n";
+        cout << RESET;
+        cout << RED << "5. Delete Student by ID\n";
+        cout << RESET;
+        cout << GREEN << "6. Exit\n";
+        cout << RESET;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -372,7 +386,10 @@ int main()
             cout << "Exiting program.\n";
             break;
         default:
-            cout << "Invalid choice. Try again.\n";
+            // cout << "Invalid choice. Try again.\n";
+            cout << "Invalid choice. Press enter to continue...\n";
+            cin.ignore();
+            cin.get();
         }
     } while (choice != 6);
 
