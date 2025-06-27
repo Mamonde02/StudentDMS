@@ -19,6 +19,37 @@ struct Student
     int age;
 };
 
+const string ADMIN_USERNAME = "admin";
+const string ADMIN_PASSWORD = "1234";
+
+bool login()
+{
+    string username, password;
+
+    cout << "=============================\n";
+    cout << BLUE << "  Admin Login Required\n";
+    cout << RESET;
+    cout << "=============================\n";
+
+    cout << "Username: ";
+    cin >> username;
+    cout << "Password: ";
+    cin >> password;
+
+    if (username == ADMIN_USERNAME && password == ADMIN_PASSWORD)
+    {
+        cout << GREEN << "\n Login successful!\n";
+        return true;
+    }
+    else
+    {
+        cout << RED << "\n Invalid credentials. Access denied.\n";
+        cout << RESET;
+        // cout << "Please try again.\n";
+        return false;
+    }
+}
+
 // error handling for invalid input
 int getValidInt(const string &prompt)
 {
@@ -344,6 +375,12 @@ void deleteStudent()
 
 int main()
 {
+    if (!login())
+    {
+        cout << "\nExiting...\n";
+        return 0;
+    }
+
     int choice;
 
     do
