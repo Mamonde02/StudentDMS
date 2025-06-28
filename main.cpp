@@ -19,8 +19,33 @@ struct Student
     int age;
 };
 
-const string ADMIN_USERNAME = "admin";
-const string ADMIN_PASSWORD = "1234";
+bool verifyCredentials(const string &inputUser, const string &inputPass)
+{
+    ifstream file("admins.txt");
+    if (!file)
+    {
+        cout << "Cannot open admins.txt\n";
+        return false;
+    }
+
+    string line;
+    while (getline(file, line))
+    {
+        size_t commaPos = line.find(',');
+        if (commaPos == string::npos)
+            continue;
+
+        string fileUser = line.substr(0, commaPos);
+        string filePass = line.substr(commaPos + 1);
+
+        if (inputUser == fileUser && inputPass == filePass)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 bool login()
 {
@@ -36,7 +61,7 @@ bool login()
     cout << "Password: ";
     cin >> password;
 
-    if (username == ADMIN_USERNAME && password == ADMIN_PASSWORD)
+    if (verifyCredentials(username, password))
     {
         cout << GREEN << "\n Login successful!\n";
         return true;
