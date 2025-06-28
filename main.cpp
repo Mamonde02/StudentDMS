@@ -19,6 +19,23 @@ struct Student
     int age;
 };
 
+void registerAdmin()
+{
+    string username, password;
+
+    cout << "\n--- Register New Admin ---\n";
+    cout << "Enter new username: ";
+    cin >> username;
+    cout << "Enter new password: ";
+    cin >> password;
+
+    ofstream file("admins.txt", ios::app);
+    file << username << "," << password << "\n";
+    file.close();
+
+    cout << "New admin account created.\n";
+}
+
 bool verifyCredentials(const string &inputUser, const string &inputPass)
 {
     ifstream file("admins.txt");
@@ -52,9 +69,27 @@ bool login()
     string username, password;
 
     cout << "=============================\n";
-    cout << BLUE << "  Admin Login Required\n";
+    cout << BLUE << "  Admin Login System\n";
     cout << RESET;
     cout << "=============================\n";
+    cout << "New admin? press 1 to Register here.\n";
+    cout << "1. Register New Admin\n";
+    cout << "2. Login with Existing Admin\n";
+    cout << "Enter your choice (1 or 2): ";
+    int choice;
+    cin >> choice;
+
+    if (choice == 1)
+    {
+        registerAdmin();
+        return login();
+    }
+    else if (choice != 2)
+    {
+        cout << RED << "Invalid choice. Please try again.\n"
+             << RESET;
+        return login();
+    }
 
     cout << "Username: ";
     cin >> username;
