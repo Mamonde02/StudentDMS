@@ -12,6 +12,52 @@ using namespace std;
 #define BLUE "\033[34m"
 #define RESET "\033[0m"
 
+// Function to get a masked password input
+// This function will not echo the characters typed by the user
+#ifdef _WIN32
+#include <conio.h> // For getch() on Windows
+#else
+#include <termios.h>
+#include <unistd.h>
+char getch()
+{
+    struct termios oldt, newt;
+    char ch;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return ch;
+}
+#endif
+
+string getMaskedPassword()
+{
+    string password;
+    char ch;
+
+    while ((ch = getch()) != '\r')
+    { // Enter key in Windows
+        if (ch == '\b')
+        { // Handle backspace
+            if (!password.empty())
+            {
+                password.pop_back();
+                cout << "\b \b";
+            }
+        }
+        else
+        {
+            password += ch;
+            cout << '*';
+        }
+    }
+    cout << endl;
+    return password;
+}
+
 struct Student
 {
     int id;
@@ -66,7 +112,7 @@ bool verifyCredentials(const string &inputUser, const string &inputPass)
 
 bool login()
 {
-    string username, password;
+    string username;
 
     cout << "=============================\n";
     cout << BLUE << "  Admin Login System\n";
@@ -93,8 +139,10 @@ bool login()
 
     cout << "Username: ";
     cin >> username;
+
     cout << "Password: ";
-    cin >> password;
+    string password = getMaskedPassword();
+    // cin >> password;
 
     if (verifyCredentials(username, password))
     {
