@@ -113,56 +113,85 @@ bool verifyCredentials(const string &inputUser, const string &inputPass)
 bool login()
 {
     string username;
-
-    cout << "=============================\n";
-    cout << BLUE << "  Admin Login System\n";
-    cout << RESET;
-    cout << "=============================\n";
-    cout << "New admin? press 1 to Register here.\n";
-    cout << "1. Register New Admin\n";
-    cout << "2. Login with Existing Admin\n";
-    cout << "Enter your choice (1 or 2): ";
-    int choice;
-    cin >> choice;
-
-    if (choice == 1)
+    int attempts = 3;
+    while (attempts > 0)
     {
-        registerAdmin();
-        return login();
-    }
-    else if (choice != 2)
-    {
-        cout << RED << "Invalid choice. Please try again.\n"
-             << RESET;
-        return login();
-    }
+        cout << "Enter username: ";
+        cin >> username;
 
-    cout << "Username: ";
-    cin >> username;
+        cout << "Enter password: ";
+        string password = getMaskedPassword();
+        // cin >> password;
 
-    cout << "Password: ";
-    string password = getMaskedPassword();
-    // cin >> password;
-
-    if (verifyCredentials(username, password))
-    {
-        cout << GREEN << "\n Login successful!\n";
-        return true;
-    }
-    else
-    {
-        // cout << RED << "\n Invalid credentials. Please try again.\n"
-        //      << RESET;
-        // // return false;
-        // return login();
-        // using while loop
-        while (true)
+        if (verifyCredentials(username, password))
         {
-            cout << RED << "\n Invalid credentials. Please try again.\n"
+            cout << GREEN << "\nLogin successful!\n"
                  << RESET;
-            return login();
+            return true;
+        }
+        else
+        {
+            attempts--;
+            cout << RED << "\nInvalid credentials. You have " << attempts << " attempts left.\n"
+                 << RESET;
+            if (attempts == 0)
+            {
+                cout << RED << "Too many failed attempts. Exiting...\n"
+                     << RESET;
+                return false;
+            }
         }
     }
+
+    // cout << "=============================\n";
+    // cout << BLUE << "  Admin Login System\n";
+    // cout << RESET;
+    // cout << "=============================\n";
+    // cout << "New admin? press 1 to Register here.\n";
+    // cout << "1. Register New Admin\n";
+    // cout << "2. Login with Existing Admin\n";
+    // cout << "Enter your choice (1 or 2): ";
+    // int choice;
+    // cin >> choice;
+
+    // if (choice == 1)
+    // {
+    //     registerAdmin();
+    //     return login();
+    // }
+    // else if (choice != 2)
+    // {
+    //     cout << RED << "Invalid choice. Please try again.\n"
+    //          << RESET;
+    //     return login();
+    // }
+
+    // cout << "Username: ";
+    // cin >> username;
+
+    // cout << "Password: ";
+    // string password = getMaskedPassword();
+    // // cin >> password;
+
+    // if (verifyCredentials(username, password))
+    // {
+    //     cout << GREEN << "\n Login successful!\n";
+    //     return true;
+    // }
+    // else
+    // {
+    //     // cout << RED << "\n Invalid credentials. Please try again.\n"
+    //     //      << RESET;
+    //     // // return false;
+    //     // return login();
+    //     // using while loop
+    //     while (true)
+    //     {
+    //         cout << RED << "\n Invalid credentials. Please try again.\n"
+    //              << RESET;
+    //         return login();
+    //     }
+    // }
 }
 
 // error handling for invalid input
