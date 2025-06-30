@@ -139,12 +139,23 @@ bool login()
 
     while (attempts > 0)
     {
+        // initial back..
+        int backOption;
+        cout << "\n--- Admin Login ---\n";
+        cout << "Type 'back' or '0' to return to the main menu.\n";
+
         cout << "Enter username: ";
-        cin >> username;
+        cin >> username || backOption;
 
         cout << "Enter password: ";
         string password = getMaskedPassword();
         // cin >> password;
+
+        if (backOption == 0 || username == "back")
+        {
+            cout << "Returning to main menu...\n";
+            return false;
+        }
 
         if (verifyCredentials(username, password))
         {
