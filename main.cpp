@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include "auth.h"
+#include "student.h"
 using namespace std;
 
 // Color codes for terminal output
@@ -193,15 +194,15 @@ void addStudent()
 }
 
 // Display all students
-void displayStudents()
-{
-    vector<Student> students = readAllStudents();
-    cout << "\n--- All Students ---\n";
-    for (const auto &s : students)
-    {
-        cout << "ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
-    }
-}
+// void displayStudents()
+// {
+//     vector<Student> students = readAllStudents();
+//     cout << "\n--- All Students ---\n";
+//     for (const auto &s : students)
+//     {
+//         cout << "ID: " << s.id << ", Name: " << s.name << ", Age: " << s.age << endl;
+//     }
+// }
 
 // Search student by ID
 void searchStudent()
@@ -399,7 +400,7 @@ int main()
             addStudent();
             break;
         case 2:
-            displayStudents();
+            displayStudents(); //
             break;
         case 3:
             searchStudent();
