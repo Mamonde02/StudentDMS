@@ -8,6 +8,7 @@
             "args": [
                 "main.cpp",
                 "auth.cpp",
+                "student.cpp",
                 "-o",
                 "studentdb.exe"
             ],
