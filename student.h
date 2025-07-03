@@ -15,5 +15,7 @@ struct Studentfrom
 Studentfrom parseStudentfromstudent(const std::string &line);
 std::vector<Studentfrom> readAllStudentsfromstudent();
 void displayStudents();
+void addStudents();
+void searchStudents();
 
 #endif
