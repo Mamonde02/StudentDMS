@@ -397,13 +397,13 @@ int main()
         switch (choice)
         {
         case 1:
-            addStudent();
+            addStudents(); //
             break;
         case 2:
             displayStudents(); //
             break;
         case 3:
-            searchStudent();
+            searchStudents(); //
             break;
         case 4:
             editStudent();
