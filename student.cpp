@@ -8,6 +8,27 @@
 
 using namespace std;
 
+int getValidInt(const string &prompt)
+{
+    int value;
+    while (true)
+    {
+        cout << prompt;
+        cin >> value;
+        if (!cin.fail())
+        {
+            cin.ignore(); // clear newline from buffer
+            return value;
+        }
+        else
+        {
+            cout << "Invalid input. Please enter a number.\n";
+            cin.clear();             // clear error flag
+            cin.ignore(10000, '\n'); // discard invalid input
+        }
+    }
+}
+
 void writeAllStudents(const vector<Studentfrom> &students) //
 {
     ofstream outFile("students.txt");
@@ -181,5 +202,69 @@ void searchStudents()
 
         if (!found)
             cout << "Student not found with ID: " << s.id << ".\n";
+    }
+}
+
+void editStudents() //
+{
+    // int editId = getValidInt("Enter ID to edit: ");
+    vector<Studentfrom> students = readAllStudentsfromstudent();
+    Studentfrom s;
+    string input;
+
+    // ID input with 'back' option
+    while (true)
+    {
+        cout << "Enter student ID (or type 'back' to return): from student.cpp file\n";
+        cin >> input;
+        if (input == "back" || input == "0")
+            return;
+
+        try
+        {
+            s.id = stoi(input);
+        }
+        catch (...)
+        {
+            cout << "Invalid input. Please enter a valid number.\n";
+            continue;
+        }
+        bool found = false;
+
+        for (auto &s : students)
+        {
+            if (s.id == stoi(input))
+            {
+                cout << "Editing student: " << s.name << endl;
+                cout << "Enter new name: ";
+                getline(cin, s.name);
+                while (s.name.empty())
+                {
+                    cout << "Name cannot be empty. Enter new name: ";
+                    getline(cin, s.name);
+                }
+
+                s.age = getValidInt("Enter new age: ");
+                while (s.age < 1 || s.age > 120)
+                {
+                    cout << "Age must be between 1 and 120.\n";
+                    s.age = getValidInt("Enter new age: ");
+                }
+
+                found = true;
+                break;
+            }
+        }
+
+        if (found)
+        {
+            writeAllStudents(students);
+            cout << "Student record updated.\n";
+        }
+        else
+        {
+            // cout << "Student ID not found in the database.\n";
+            cout << "Student not found with ID: " << s.id << ".\n";
+        }
     }
 }
