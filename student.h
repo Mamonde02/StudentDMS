@@ -14,9 +14,11 @@ struct Studentfrom
 // Function declarations
 Studentfrom parseStudentfromstudent(const std::string &line);
 std::vector<Studentfrom> readAllStudentsfromstudent();
+int getValidInt(const std::string &prompt);
 void writeAllStudents(const std::vector<Studentfrom> &students);
 void displayStudents();
 void addStudents();
 void searchStudents();
+void editStudents();
 
 #endif
