@@ -8,6 +8,16 @@
 
 using namespace std;
 
+void writeAllStudents(const vector<Studentfrom> &students) //
+{
+    ofstream outFile("students.txt");
+    for (const auto &s : students)
+    {
+        outFile << s.id << "," << s.name << "," << s.age << "\n";
+    }
+    outFile.close();
+}
+
 Studentfrom parseStudentfromstudent(const string &line)
 {
     stringstream ss(line);
