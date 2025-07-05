@@ -397,19 +397,19 @@ int main()
         switch (choice)
         {
         case 1:
-            addStudents(); //
+            addStudents();
             break;
         case 2:
-            displayStudents(); //
+            displayStudents();
             break;
         case 3:
-            searchStudents(); //
+            searchStudents();
             break;
         case 4:
-            editStudent();
+            editStudents();
             break;
         case 5:
-            deleteStudent();
+            deleteStudents();
             break;
         case 6:
             cout << "Exiting program.\n";
