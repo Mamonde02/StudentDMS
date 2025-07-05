@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int getValidInt(const string &prompt)
+int getValidInts(const string &prompt)
 {
     int value;
     while (true)
@@ -244,11 +244,11 @@ void editStudents() //
                     getline(cin, s.name);
                 }
 
-                s.age = getValidInt("Enter new age: ");
+                s.age = getValidInts("Enter new age: ");
                 while (s.age < 1 || s.age > 120)
                 {
                     cout << "Age must be between 1 and 120.\n";
-                    s.age = getValidInt("Enter new age: ");
+                    s.age = getValidInts("Enter new age: ");
                 }
 
                 found = true;
@@ -264,6 +264,59 @@ void editStudents() //
         else
         {
             // cout << "Student ID not found in the database.\n";
+            cout << "Student not found with ID: " << s.id << ".\n";
+        }
+    }
+}
+
+void deleteStudents() //
+{
+    // int deleteId = getValidInt("Enter ID to delete: ");
+    vector<Studentfrom> students = readAllStudentsfromstudent();
+    bool found = false;
+
+    Studentfrom s;
+    string input;
+
+    // ID input with 'back' option
+    while (true)
+    {
+        cout << "Enter student ID (or type 'back' to return):  from student.cpp file\n";
+        cin >> input;
+        if (input == "back" || input == "0")
+            return;
+
+        try
+        {
+            s.id = stoi(input);
+        }
+        catch (...)
+        {
+            cout << "Invalid input. Please enter a valid number.\n";
+            continue;
+        }
+
+        vector<Studentfrom> updatedStudents;
+        for (const auto &s : students)
+        {
+            if (s.id == stoi(input))
+            {
+                found = true;
+            }
+            else
+            {
+                updatedStudents.push_back(s);
+            }
+        }
+
+        if (found)
+        {
+            writeAllStudents(updatedStudents);
+            cout << "Student deleted successfully.\n";
+        }
+        else
+        {
+            // cout << "Student ID not found.\n";
             cout << "Student not found with ID: " << s.id << ".\n";
         }
     }
