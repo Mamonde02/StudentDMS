@@ -12,6 +12,8 @@ using namespace std;
 #define BLUE "\033[34m"
 #define RESET "\033[0m"
 
+// Function to get a masked password input
+// This function will not echo the characters typed by the user
 #ifdef _WIN32
 #include <conio.h> // For getch() on Windows
 #else
