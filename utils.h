@@ -4,8 +4,13 @@
 #include <string>
 #include <vector>
 
-void displayMessage(const std::string &message);
-int getValidInt(const std::string &prompt);
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define RESET "\033[0m"
 
+void displayMenu(int &choice);
+int getValidInt(const std::string &prompt);
 
 #endif
