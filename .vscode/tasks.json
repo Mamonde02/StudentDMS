@@ -9,6 +9,7 @@
                 "main.cpp",
                 "auth.cpp",
                 "student.cpp",
+                "utils.cpp",
                 "-o",
                 "studentdb.exe"
             ],
